@@ -20,15 +20,15 @@ public class AnimalEntity {
 
     private String noise;
 
-    private String specy;
+    private String species;
 
     public AnimalEntity() {}
 
-    public AnimalEntity(int id, String name, String noise, String specy) {
+    public AnimalEntity(int id, String name, String noise, String species) {
         this.id = id;
         this.name = name;
         this.noise = noise;
-        this.specy = specy;
+        this.species = species;
     }
 
     public int getId() {
@@ -55,12 +55,12 @@ public class AnimalEntity {
         this.noise = noise;
     }
 
-    public String getSpecy() {
-        return specy;
+    public String getSpecies() {
+        return species;
     }
 
-    public void setSpecy(String specy) {
-        this.specy = specy;
+    public void setSpecies(String species) {
+        this.species = species;
     }
 
 }
