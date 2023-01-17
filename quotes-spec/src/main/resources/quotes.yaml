@@ -8,6 +8,8 @@ servers:
 tags:
   - name: Quotes-end-point
     description: Gestion des quotes
+  - name: Animals-end-point
+    description: Gestion des animaux
 paths:
   /quotes:
     get:
@@ -69,6 +71,66 @@ paths:
         '404':
           description: Not Found
       deprecated: false
+  /animals:
+    get:
+      tags:
+        - Animals-end-point
+      summary: Obtient une liste de toutes les animaux
+      operationId: getAnimals
+      responses:
+        '200':
+          description: OK
+          content:
+            'application/json':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Animal'
+        '404':
+          description: Not Found
+    post:
+      tags:
+        - Animals-end-point
+      summary: Ajoute un nouvel animal
+      operationId: addAnimal
+      requestBody:
+        content:
+          'application/json':
+            schema:
+              $ref: '#/components/schemas/Animal'
+      responses:
+        '201':
+          description: animal crée
+          headers:
+            Location:
+              description: URL de l'animal crée
+              schema:
+                type: string
+                format: uri
+  /animals/{id}:
+    get:
+      tags:
+        - Animals-end-point
+      summary: Obtient un animal
+      operationId: getAnimal
+      parameters:
+        - name: id
+          in: path
+          description: numéro de l'animal à obtenir
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: OK
+          content:
+            'application/json':
+              schema:
+                $ref: '#/components/schemas/Animal'
+        '404':
+          description: Not Found
+      deprecated: false
 components:
   schemas:
     Quote:
@@ -86,3 +148,21 @@ components:
           type: integer
           format: int32
       title: Quote
+    Animal:
+      description: toutes les caractéristiques d'un animal
+      type: object
+      properties:
+        sound:
+          description: son que fait l'animal
+          type: string
+        species:
+          description: espèce de l'animal
+          type: string
+        name:
+          description: nom de l'animal
+          type: string
+        id:
+          description: numéro auto-incrémenté de l'animal
+          type: integer
+          format: int32
+      title: Animal
