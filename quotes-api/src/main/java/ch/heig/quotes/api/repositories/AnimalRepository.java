@@ -9,10 +9,9 @@ import java.util.List;
 @Repository
 public interface AnimalRepository extends JpaRepository<AnimalEntity, Integer> {
     AnimalEntity findById(int id);
-    /*
+
     List<AnimalEntity> findBySpeciesLike(String pattern);
 
-     */
 
 }
 

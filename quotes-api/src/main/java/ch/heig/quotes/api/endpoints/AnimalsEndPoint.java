@@ -52,7 +52,11 @@ public class AnimalsEndPoint implements AnimalsApi {
         animalEntity.setName(animal.getName());
         animalEntity.setNoise(animal.getSound());
         AnimalEntity animalAdded = animalRepository.save(animalEntity);
-        URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(animalAdded.getId()).toUri();
+        URI location = ServletUriComponentsBuilder
+                .fromCurrentRequest()
+                .path("/{id}")
+                .buildAndExpand(animalAdded.getId())
+                .toUri();
         return ResponseEntity.created(location).build();
     }
 
@@ -71,10 +75,4 @@ public class AnimalsEndPoint implements AnimalsApi {
             throw new QuoteNotFoundException(id);
         }
     }
-
-
-
-
-
-
 }

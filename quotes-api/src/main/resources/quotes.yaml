@@ -8,6 +8,8 @@ servers:
 tags:
   - name: Quotes-end-point
     description: Gestion des quotes
+  - name: Animals-end-point
+    description: Gestion des animaux
 paths:
   /quotes:
     get:
