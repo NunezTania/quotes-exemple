@@ -71,6 +71,24 @@ paths:
         '404':
           description: Not Found
       deprecated: false
+    put:
+      tags:
+        - Quotes-end-point
+      summary: Met à jour une quote
+      operationId: updateQuote
+      parameters:
+        - name: id
+          in: path
+          description: numéro de la quote à mettre à jour
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '204':
+          description: OK
+        '404':
+          description: Not Found
   /animals:
     get:
       tags:
@@ -152,17 +170,31 @@ components:
       description: toutes les caractéristiques d'un animal
       type: object
       properties:
-        sound:
+        name:
+          description: nom de l'animal
+          type: string
+        noise:
           description: son que fait l'animal
           type: string
         species:
           description: espèce de l'animal
-          type: string
-        name:
-          description: nom de l'animal
           type: string
         id:
           description: numéro auto-incrémenté de l'animal
           type: integer
           format: int32
       title: Animal
+    Species:
+      description: toutes les caractéristiques d'une espèce
+      type: object
+      properties:
+        name:
+          description: nom de l'espèce
+          type: string
+        description:
+          description: description de l'espèce
+          type: string
+        id:
+          description: numéro auto-incrémenté de l'espèce
+          type: integer
+          format: int32

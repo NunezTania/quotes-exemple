@@ -1,6 +1,5 @@
 package ch.heig.quotes.api.endpoints;
 
-import ch.heig.quotes.api.entities.AnimalEntity;
 import org.openapitools.api.QuotesApi;
 import ch.heig.quotes.api.exceptions.QuoteNotFoundException;
 import org.openapitools.model.Quote;

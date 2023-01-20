@@ -10,6 +10,8 @@ tags:
     description: Gestion des quotes
   - name: Animals-end-point
     description: Gestion des animaux
+  - name: Races-end-point
+    description: Gestion des races
 paths:
   /quotes:
     get:
@@ -71,6 +73,24 @@ paths:
         '404':
           description: Not Found
       deprecated: false
+    put:
+        tags:
+            - Quotes-end-point
+        summary: Met à jour une quote
+        operationId: updateQuote
+        parameters:
+            - name: id
+              in: path
+              description: numéro de la quote à mettre à jour
+              required: true
+              schema:
+                type: integer
+                format: int32
+        responses:
+            '204':
+              description: OK
+            '404':
+              description: Not Found
   /animals:
     get:
       tags:
@@ -131,6 +151,47 @@ paths:
         '404':
           description: Not Found
       deprecated: false
+  /races:
+    get:
+      tags:
+        - Races-end-point
+      summary: Obtient une liste de toutes les races
+      operationId: getRaces
+      responses:
+        '200':
+          description: OK
+          content:
+            'application/json':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Race'
+        '404':
+          description: Not Found
+  /races/{id}:
+    get:
+      tags:
+        - Races-end-point
+      summary: Obtient une race
+      operationId: getRace
+      parameters:
+        - name: id
+          in: path
+          description: numéro de la race à obtenir
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: OK
+          content:
+            'application/json':
+              schema:
+                $ref: '#/components/schemas/Race'
+        '404':
+          description: Not Found
+      deprecated: false
 components:
   schemas:
     Quote:
@@ -152,17 +213,31 @@ components:
       description: toutes les caractéristiques d'un animal
       type: object
       properties:
-        sound:
+        name:
+          description: nom de l'animal
+          type: string
+        noise:
           description: son que fait l'animal
           type: string
         species:
           description: espèce de l'animal
-          type: string
-        name:
-          description: nom de l'animal
           type: string
         id:
           description: numéro auto-incrémenté de l'animal
           type: integer
           format: int32
       title: Animal
+    Race:
+      description: toutes les caractéristiques d'une race
+      type: object
+      properties:
+        name:
+          description: nom de la race
+          type: string
+        description:
+          description: description de la race
+          type: string
+        id:
+          description: numéro auto-incrémenté de la race
+          type: integer
+          format: int32
