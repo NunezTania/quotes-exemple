@@ -1,6 +1,10 @@
 package ch.heig.quotes.api.entities;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
+
+import java.util.Set;
 
 @Entity(name = "Race")
 @Table(name = "races")
@@ -13,10 +17,24 @@ public class RaceEntity {
             allocationSize = 100)
     @Id // @GeneratedValue
     @GeneratedValue(strategy = GenerationType.TABLE, generator = "genRaces")
+    @Getter
+    @Setter
     private int id;
-
+    @Getter
+    @Setter
     private String name;
+    @Getter
+    @Setter
     private String description;
+
+    @ManyToMany(targetEntity = LocationEntity.class)
+    @JoinTable(name="locations_races",
+            joinColumns = @JoinColumn(name="race_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name="location_id", referencedColumnName = "id"))
+    private Set<LocationEntity> locations;
+
+    @OneToMany(mappedBy = "race")
+    private Set<AnimalEntity> animal;
 
     public RaceEntity() {}
 
@@ -25,20 +43,4 @@ public class RaceEntity {
         this.name = name;
         this.description = description;
     }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getName() { return name; }
-
-    public void setName(String name) { this.name = name; }
-
-    public String getDescription() { return description; }
-
-    public void setDescription(String description) { this.description = description; }
 }
