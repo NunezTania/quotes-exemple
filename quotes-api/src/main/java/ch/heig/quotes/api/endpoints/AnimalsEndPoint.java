@@ -2,6 +2,7 @@ package ch.heig.quotes.api.endpoints;
 
 import ch.heig.quotes.api.entities.AnimalEntity;
 import ch.heig.quotes.api.entities.RaceEntity;
+import ch.heig.quotes.api.exceptions.AnimalAlreadyExistsException;
 import ch.heig.quotes.api.exceptions.AnimalNotFoundException;
 import ch.heig.quotes.api.exceptions.RaceNotFoundException;
 import ch.heig.quotes.api.repositories.AnimalRepository;
@@ -125,6 +126,8 @@ public class AnimalsEndPoint implements AnimalsApi {
     }
     @Override
     public ResponseEntity<Void> replaceAnimal(Integer id, @RequestBody Animal animal) {
+        if (animalRepository.findById(animal.getId()).isPresent())
+            throw new AnimalAlreadyExistsException(animal.getId());
         if (animalRepository.findById(id).isPresent()) {
             animalRepository.replaceAnimalById(
                     id,
