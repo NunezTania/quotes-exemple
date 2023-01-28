@@ -43,17 +43,16 @@ public interface AnimalRepository extends JpaRepository<AnimalEntity, Integer> {
     @Modifying
     @Transactional
     @Query(value = "update Animal as a set" +
-            " a.id = :new_id," +
             " a.name = :name," +
             " a.noise = :noise," +
             " a.species = :species," +
             "a.race = :race" +
             " where a.id = :id")
     void replaceAnimalById(@Param("id") Integer id,
-                          @Param("new_id") Integer new_id,
                           @Param("name") String name,
                           @Param("noise") String noise,
                           @Param("species") String species,
                           @Param("race") RaceEntity race);
+
 }
 

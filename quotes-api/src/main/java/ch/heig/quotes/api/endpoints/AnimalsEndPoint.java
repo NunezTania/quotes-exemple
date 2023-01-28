@@ -44,11 +44,15 @@ public class AnimalsEndPoint implements AnimalsApi {
             animal.setRace(animalEntity.getRace().getId());
             animals.add(animal);
         }
-        return new ResponseEntity<List<Animal>>(animals,HttpStatus.OK);
+        return new ResponseEntity<>(animals, HttpStatus.OK);
     }
 
     @Override
     public ResponseEntity<Void> addAnimal(@RequestBody Animal animal) {
+        if (raceRepository.findById(animal.getRace()).isEmpty())
+            throw new RaceNotFoundException(animal.getRace());
+        if (animalRepository.findById(animal.getId()).isPresent())
+            throw new AnimalAlreadyExistsException(animal.getId());
         animalRepository.insertAnimal(animal.getId(),
                 animal.getName(),
                 animal.getNoise(),
@@ -72,7 +76,7 @@ public class AnimalsEndPoint implements AnimalsApi {
             animal.setName(animalEntity.getName());
             animal.setNoise(animalEntity.getNoise());
             animal.setRace(animalEntity.getRace().getId());
-            return new ResponseEntity<Animal>(animal, HttpStatus.OK);
+            return new ResponseEntity<>(animal, HttpStatus.OK);
         } else {
             throw new AnimalNotFoundException(id);
         }
@@ -88,7 +92,7 @@ public class AnimalsEndPoint implements AnimalsApi {
             race.setId(raceEntity.getId());
             race.setName(raceEntity.getName());
             race.setDescription(raceEntity.getDescription());
-            return new ResponseEntity<Race>(race, HttpStatus.OK);
+            return new ResponseEntity<>(race, HttpStatus.OK);
         } else {
             throw new AnimalNotFoundException(id);
         }
@@ -98,7 +102,7 @@ public class AnimalsEndPoint implements AnimalsApi {
     public ResponseEntity<Void> deleteAnimal(Integer id) {
         if (animalRepository.findById(id).isPresent()) {
             animalRepository.deleteById(id);
-            return new ResponseEntity<Void>(HttpStatus.OK);
+            return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
         } else {
             throw new AnimalNotFoundException(id);
         }
@@ -114,37 +118,37 @@ public class AnimalsEndPoint implements AnimalsApi {
                     animal.getSpecies(),
                     raceRepository.findById(animal.getRace())
                             .orElseThrow(() -> new RaceNotFoundException(animal.getRace())));
-            URI location = ServletUriComponentsBuilder
-                    .fromCurrentRequest()
-                    .path("/{id}")
-                    .buildAndExpand(animal.getId())
-                    .toUri();
-            return ResponseEntity.created(location).build();
+            return new ResponseEntity<>(HttpStatus.ACCEPTED);
         } else {
             throw new AnimalNotFoundException(id);
         }
     }
     @Override
-    public ResponseEntity<Void> replaceAnimal(Integer id, @RequestBody Animal animal) {
-        if (animalRepository.findById(animal.getId()).isPresent())
-            throw new AnimalAlreadyExistsException(animal.getId());
+    public ResponseEntity<Void> putAnimal(@RequestBody Animal animal) {
+        if (raceRepository.findById(animal.getRace()).isEmpty())
+            throw new RaceNotFoundException(animal.getRace());
+        Integer id = animal.getId();
         if (animalRepository.findById(id).isPresent()) {
             animalRepository.replaceAnimalById(
                     id,
-                    animal.getId(),
                     animal.getName(),
                     animal.getNoise(),
                     animal.getSpecies(),
                     raceRepository.findById(animal.getRace())
                             .orElseThrow(() -> new RaceNotFoundException(animal.getRace())));
-            URI location = ServletUriComponentsBuilder
-                    .fromCurrentRequest()
-                    .path("/{id}")
-                    .buildAndExpand(animal.getId())
-                    .toUri();
-            return ResponseEntity.created(location).build();
         } else {
-            throw new AnimalNotFoundException(id);
+            animalRepository.insertAnimal(
+                    animal.getId(),
+                    animal.getName(),
+                    animal.getNoise(),
+                    animal.getSpecies(),
+                    animal.getRace());
         }
+        URI location = ServletUriComponentsBuilder
+                .fromCurrentRequest()
+                .path("/{id}")
+                .buildAndExpand(animal.getId())
+                .toUri();
+        return ResponseEntity.created(location).build();
     }
 }

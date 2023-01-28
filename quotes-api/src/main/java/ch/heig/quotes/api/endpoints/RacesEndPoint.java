@@ -1,6 +1,6 @@
 package ch.heig.quotes.api.endpoints;
 
-import ch.heig.quotes.api.exceptions.QuoteNotFoundException;
+import ch.heig.quotes.api.exceptions.RaceNotFoundException;
 import org.openapitools.api.RacesApi;
 import org.openapitools.model.Race;
 import ch.heig.quotes.api.entities.RaceEntity;
@@ -45,8 +45,7 @@ public class RacesEndPoint implements RacesApi {
             race.setDescription(raceEntity.getDescription());
             return new ResponseEntity<Race>(race, HttpStatus.OK);
         } else {
-               // return ResponseEntity.notFound().build();
-            throw new QuoteNotFoundException(id);
+            throw new RaceNotFoundException(id);
         }
     }
 }

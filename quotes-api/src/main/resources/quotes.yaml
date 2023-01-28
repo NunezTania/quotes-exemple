@@ -75,24 +75,6 @@ paths:
         '404':
           description: Not Found
       deprecated: false
-    put:
-        tags:
-            - Quotes-end-point
-        summary: Met à jour une quote
-        operationId: updateQuote
-        parameters:
-            - name: id
-              in: path
-              description: numéro de la quote à mettre à jour
-              required: true
-              schema:
-                type: integer
-                format: int32
-        responses:
-            '204':
-              description: OK
-            '404':
-              description: Not Found
   /animals:
     get:
       tags:
@@ -129,6 +111,23 @@ paths:
               schema:
                 type: string
                 format: uri
+        '400':
+          description: Bad Request animal already exists
+    put:
+      tags:
+        - Animals-end-point
+      summary: Remplace ou crée un animal
+      operationId: putAnimal
+      requestBody:
+        content:
+          'application/json':
+            schema:
+              $ref: '#/components/schemas/Animal'
+      responses:
+        '201':
+          description: Created
+        '404':
+          description: Not Found
   /animals/{id}:
     get:
       tags:
@@ -168,30 +167,7 @@ paths:
             format: int32
       responses:
         '204':
-          description: OK
-        '404':
-          description: Not Found
-    put:
-      tags:
-        - Animals-end-point
-      summary: Remplace un animal
-      operationId: replaceAnimal
-      requestBody:
-        content:
-          'application/json':
-            schema:
-              $ref: '#/components/schemas/Animal'
-      parameters:
-        - name: id
-          in: path
-          description: numéro de l'animal à supprimer
-          required: true
-          schema:
-            type: integer
-            format: int32
-      responses:
-        '204':
-          description: OK
+          description: No Content
         '404':
           description: Not Found
     patch:
@@ -213,8 +189,8 @@ paths:
             type: integer
             format: int32
       responses:
-        '204':
-          description: OK
+        '202':
+          description: Accepted
         '404':
           description: Not Found
   /animals/{id}/race:
@@ -318,6 +294,8 @@ paths:
               schema:
                 type: string
                 format: uri
+        '400':
+            description: Bad Request localisation already exists
   /locations/{id}:
     get:
       tags:
@@ -339,6 +317,58 @@ paths:
             'application/json':
               schema:
                 $ref: '#/components/schemas/Location'
+        '404':
+          description: Not Found
+      deprecated: false
+  /locations/{id}/races:
+    get:
+      tags:
+        - Locations-end-point
+      summary: Obtient la liste des races à la location demandée
+      operationId: getLocationRaces
+      parameters:
+        - name: id
+          in: path
+          description: numéro de la localisation à obtenir
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: OK
+          content:
+            'application/json':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Race'
+        '404':
+          description: Not Found
+      deprecated: false
+  /locations/{id}/animals:
+    get:
+      tags:
+        - Locations-end-point
+      summary: Obtient la liste des animaux à la location demandée
+      operationId: getLocationAnimals
+      parameters:
+        - name: id
+          in: path
+          description: numéro de la localisation dont on veut obtenir les animaux
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: OK
+          content:
+            'application/json':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Animal'
         '404':
           description: Not Found
       deprecated: false

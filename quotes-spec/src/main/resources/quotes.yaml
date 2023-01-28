@@ -10,6 +10,10 @@ tags:
     description: Gestion des quotes
   - name: Animals-end-point
     description: Gestion des animaux
+  - name: Races-end-point
+    description: Gestion des races
+  - name: Locations-end-point
+    description: Gestion des locations
 paths:
   /quotes:
     get:
@@ -71,24 +75,6 @@ paths:
         '404':
           description: Not Found
       deprecated: false
-    put:
-      tags:
-        - Quotes-end-point
-      summary: Met à jour une quote
-      operationId: updateQuote
-      parameters:
-        - name: id
-          in: path
-          description: numéro de la quote à mettre à jour
-          required: true
-          schema:
-            type: integer
-            format: int32
-      responses:
-        '204':
-          description: OK
-        '404':
-          description: Not Found
   /animals:
     get:
       tags:
@@ -125,6 +111,23 @@ paths:
               schema:
                 type: string
                 format: uri
+        '400':
+          description: Bad Request animal already exists
+    put:
+      tags:
+        - Animals-end-point
+      summary: Remplace ou crée un animal
+      operationId: putAnimal
+      requestBody:
+        content:
+          'application/json':
+            schema:
+              $ref: '#/components/schemas/Animal'
+      responses:
+        '201':
+          description: Created
+        '404':
+          description: Not Found
   /animals/{id}:
     get:
       tags:
@@ -146,6 +149,224 @@ paths:
             'application/json':
               schema:
                 $ref: '#/components/schemas/Animal'
+        '404':
+          description: Not Found
+      deprecated: false
+    delete:
+      tags:
+        - Animals-end-point
+      summary: Supprime un animal
+      operationId: deleteAnimal
+      parameters:
+        - name: id
+          in: path
+          description: numéro de l'animal à supprimer
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '204':
+          description: No Content
+        '404':
+          description: Not Found
+    patch:
+      tags:
+        - Animals-end-point
+      summary: Met à jour un animal
+      operationId: updateAnimal
+      requestBody:
+        content:
+          'application/json':
+            schema:
+              $ref: '#/components/schemas/Animal'
+      parameters:
+        - name: id
+          in: path
+          description: numéro de l'animal à mettre à jour
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '202':
+          description: Accepted
+        '404':
+          description: Not Found
+  /animals/{id}/race:
+    get:
+      tags:
+        - Animals-end-point
+      summary: Obtient la race d'un animal
+      operationId: getAnimalRace
+      parameters:
+        - name: id
+          in: path
+          description: numéro de l'animal à obtenir
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: OK
+          content:
+            'application/json':
+              schema:
+                $ref: '#/components/schemas/Race'
+        '404':
+          description: Not Found
+      deprecated: false
+  /races:
+    get:
+      tags:
+        - Races-end-point
+      summary: Obtient une liste de toutes les races
+      operationId: getRaces
+      responses:
+        '200':
+          description: OK
+          content:
+            'application/json':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Race'
+        '404':
+          description: Not Found
+  /races/{id}:
+    get:
+      tags:
+        - Races-end-point
+      summary: Obtient une race
+      operationId: getRace
+      parameters:
+        - name: id
+          in: path
+          description: numéro de la race à obtenir
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: OK
+          content:
+            'application/json':
+              schema:
+                $ref: '#/components/schemas/Race'
+        '404':
+          description: Not Found
+      deprecated: false
+  /locations:
+    get:
+      tags:
+        - Locations-end-point
+      summary: Obtient une liste de toutes les localisations
+      operationId: getLocations
+      responses:
+        '200':
+          description: OK
+          content:
+            'application/json':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Location'
+        '404':
+          description: Not Found
+    post:
+      tags:
+        - Locations-end-point
+      summary: Ajoute une nouvelle localisation
+      operationId: addLocation
+      requestBody:
+        content:
+          'application/json':
+            schema:
+              $ref: '#/components/schemas/Location'
+      responses:
+        '201':
+          description: localisation créée
+          headers:
+            Location:
+              description: URL de la localisation créée
+              schema:
+                type: string
+                format: uri
+  /locations/{id}:
+    get:
+      tags:
+        - Locations-end-point
+      summary: Obtient une race
+      operationId: getLocation
+      parameters:
+        - name: id
+          in: path
+          description: numéro de la localisation à obtenir
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: OK
+          content:
+            'application/json':
+              schema:
+                $ref: '#/components/schemas/Location'
+        '404':
+          description: Not Found
+      deprecated: false
+  /locations/{id}/races:
+    get:
+      tags:
+        - Locations-end-point
+      summary: Obtient la liste des races à la location demandée
+      operationId: getLocationRaces
+      parameters:
+        - name: id
+          in: path
+          description: numéro de la localisation à obtenir
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: OK
+          content:
+            'application/json':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Race'
+        '404':
+          description: Not Found
+      deprecated: false
+  /locations/{id}/animals:
+    get:
+      tags:
+        - Locations-end-point
+      summary: Obtient la liste des animaux à la location demandée
+      operationId: getLocationAnimals
+      parameters:
+        - name: id
+          in: path
+          description: numéro de la localisation dont on veut obtenir les animaux
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: OK
+          content:
+            'application/json':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Animal'
         '404':
           description: Not Found
       deprecated: false
@@ -179,22 +400,36 @@ components:
         species:
           description: espèce de l'animal
           type: string
+        race:
+          description: l'identifiant de la race de l'animal
+          type: integer
         id:
           description: numéro auto-incrémenté de l'animal
           type: integer
           format: int32
       title: Animal
-    Species:
-      description: toutes les caractéristiques d'une espèce
+    Race:
+      description: toutes les caractéristiques d'une race
       type: object
       properties:
         name:
-          description: nom de l'espèce
+          description: nom de la race
           type: string
         description:
-          description: description de l'espèce
+          description: description de la race
           type: string
         id:
-          description: numéro auto-incrémenté de l'espèce
+          description: numéro auto-incrémenté de la race
+          type: integer
+          format: int32
+    Location:
+      description: toutes les caractéristiques d'une localisation
+      type: object
+      properties:
+        name:
+          description: nom de la localisation
+          type: string
+        id:
+          description: numéro auto-incrémenté de la localisation
           type: integer
           format: int32
