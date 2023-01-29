@@ -72,3 +72,53 @@ Scenario: Delete an existing animal
 Scenario: Delete a non existing animal
   When I DELETE to the /animal/99 endpoint
   Then I receive a 404 status
+
+Scenario: Get all races
+  When I GET to the /races endpoint
+  Then I receive a 200 status
+
+Scenario: Get a race with valid it
+  When I GET to the /race/1 endpoint
+  Then I receive a 200 status
+
+Scenario: Get a race with invalid it
+  When I GET to the /race/99 endpoint
+  Then I receive a 404 status
+
+Scenario: Get all locations
+  When I GET to the /locations endpoint
+  Then I receive a 200 status
+
+Scenario: Get a location with valid it
+  When I GET to the /location/1 endpoint
+  Then I receive a 200 status
+
+Scenario: Get a location with invalid it
+  When I GET to the /location/99 endpoint
+  Then I receive a 404 status
+
+Scenario: Get a location races with valid it
+  When I GET to the /location/1/races endpoint
+  Then I receive a 200 status
+
+Scenario: Get a location races with invalid it
+  When I GET to the /location/99/races endpoint
+  Then I receive a 404 status
+
+Scenario: Get a location animals with valid it
+  When I GET to the /location/1/animals endpoint
+  Then I receive a 200 status
+
+Scenario: Get a location animals with invalid it
+  When I GET to the /location/99/animals endpoint
+  Then I receive a 404 status
+
+Scenario: Add a new location with valid id
+  Given I have a location payload with id 6
+  When I POST it to the /locations endpoint
+  Then I receive a 201 status
+
+Scenario: Add a new location with valid id
+  Given I have a location payload with id 1
+  When I POST it to the /locations endpoint
+  Then I receive a 400 status

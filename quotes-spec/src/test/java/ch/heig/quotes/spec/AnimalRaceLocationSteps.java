@@ -23,6 +23,7 @@ public class AnimalRaceLocationSteps {
     private int statusCode;
 
     private Animal animal;
+    private Location location;
 
     @Given("I have an animal payload with id {int} and race {int}")
     public void i_have_an_animal_payload(int arg1, int arg2) throws Throwable {
@@ -32,6 +33,13 @@ public class AnimalRaceLocationSteps {
         animal.setNoise("Cucumber");
         animal.setSpecies("Concombre");
         animal.setRace(arg2);
+    }
+
+    @Given("I have a location payload with id {int}")
+    public void i_have_a_location_payload(int arg1) throws Throwable {
+        location = new Location();
+        location.setId(arg1);
+        location.setName("Dans la mer");
     }
 
     @When("I GET to the \\/animals endpoint")
@@ -114,7 +122,7 @@ public class AnimalRaceLocationSteps {
         }
     }
 
-    @When("I GET to the \\/race\\/{id} endpoint")
+    @When("I GET to the \\/race\\/{int} endpoint")
     public void i_GET_to_the_race_with_id_endpoint(int arg1) throws Throwable {
         try {
             ApiResponse response = raceApi.getRaceWithHttpInfo(arg1);
@@ -134,10 +142,40 @@ public class AnimalRaceLocationSteps {
         }
     }
 
-    @When("I GET to the \\/location\\/{id} endpoint")
+    @When("I GET to the \\/location\\/{int} endpoint")
     public void i_GET_to_the_location_with_id_endpoint(int arg1) throws Throwable {
         try {
             ApiResponse response = locationApi.getLocationWithHttpInfo(arg1);
+            statusCode = response.getStatusCode();
+        } catch (ApiException e) {
+            statusCode = e.getCode();
+        }
+    }
+
+    @When("I GET to the \\/location\\/{int}\\/races endpoint")
+    public void i_GET_to_the_location_with_id_races_endpoint(int arg1) throws Throwable {
+        try {
+            ApiResponse response = locationApi.getLocationRacesWithHttpInfo(arg1);
+            statusCode = response.getStatusCode();
+        } catch (ApiException e) {
+            statusCode = e.getCode();
+        }
+    }
+
+    @When("I GET to the \\/location\\/{int}\\/animals endpoint")
+    public void i_GET_to_the_location_with_id_animals_endpoint(int arg1) throws Throwable {
+        try {
+            ApiResponse response = locationApi.getLocationAnimalsWithHttpInfo(arg1);
+            statusCode = response.getStatusCode();
+        } catch (ApiException e) {
+            statusCode = e.getCode();
+        }
+    }
+
+    @When("I POST it to the \\/locations endpoint")
+    public void i_POST_it_to_the_locations_endpoint() throws Throwable {
+        try {
+            ApiResponse response = locationApi.addLocationWithHttpInfo(location);
             statusCode = response.getStatusCode();
         } catch (ApiException e) {
             statusCode = e.getCode();

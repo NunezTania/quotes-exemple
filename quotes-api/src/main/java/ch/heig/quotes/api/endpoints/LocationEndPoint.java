@@ -47,14 +47,13 @@ public class LocationEndPoint implements LocationsApi {
         if (locationRepository.existsById(location.getId())) {
             throw new LocationAlreadyExists(location.getId());
         }
-        LocationEntity locationEntity = new LocationEntity();
-        locationEntity.setId(location.getId());
-        locationEntity.setName(location.getName());
-        LocationEntity locationAdded = locationRepository.save(locationEntity);
+        locationRepository.insertLocation(
+                location.getId(),
+                location.getName());
         URI uri = ServletUriComponentsBuilder
                 .fromCurrentRequest()
                 .path("/{id}")
-                .buildAndExpand(locationAdded.getId())
+                .buildAndExpand(location.getId())
                 .toUri();
         return ResponseEntity.created(uri).build();
     }
