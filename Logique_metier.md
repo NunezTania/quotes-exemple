@@ -50,3 +50,8 @@ testé. Ce que nous testons dans ces scenarios sont les status code de retour de
 Les scenarios sont dans le fichier [quotes.feature](quotes-spec/src/test/resources/features/quotes.feature) et
 l'implémentation des méthodes utilisée par Cucumber sont dans le fichier
 [AnimalRaceLocationSteps](quotes-spec/src/test/java/ch/heig/quotes/spec/AnimalRaceLocationSteps.java).
+
+## Lien vers la vidéo
+Désolée pour la bannière free trial de WMM... Mais c'est qu'à l'exportatin que nous avons vu que la vidéo
+nous coûterait 39.99$... Bon visonnage....
+[![Vidéo](https://img.youtube.com/vi/0Z9Z9Z9Z9Z9/0.jpg)](*lien*)
