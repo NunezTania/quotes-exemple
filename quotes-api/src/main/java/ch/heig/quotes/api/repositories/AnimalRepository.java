@@ -39,7 +39,7 @@ public interface AnimalRepository extends JpaRepository<AnimalEntity, Integer> {
     @Modifying
     @Transactional
     @Query(value = "update Animal as a set" +
-            " a.id = :new_id," +
+            " a.id = :id," +
             " a.name = :name," +
             " a.noise = :noise," +
             " a.species = :species," +

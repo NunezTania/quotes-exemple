@@ -102,8 +102,6 @@ public class AnimalService {
     }
 
     public ResponseEntity<Void> updateAnimal(Integer id, Animal animal) {
-        if (animalRepository.findById(animal.getId()).isPresent())
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         Optional<AnimalEntity> opt = animalRepository.findById(id);
         if (opt.isPresent()) {
             animalRepository.updateAnimalById(
