@@ -1,10 +1,16 @@
 package ch.heig.quotes.api.endpoints;
 
+import ch.heig.quotes.api.entities.AnimalEntity;
 import ch.heig.quotes.api.entities.LocationEntity;
+import ch.heig.quotes.api.entities.RaceEntity;
+import ch.heig.quotes.api.exceptions.LocationAlreadyExists;
 import ch.heig.quotes.api.exceptions.LocationNotFoundException;
 import ch.heig.quotes.api.repositories.LocationRepository;
+import ch.heig.quotes.api.services.LocationService;
 import org.openapitools.api.LocationsApi;
+import org.openapitools.model.Animal;
 import org.openapitools.model.Location;
+import org.openapitools.model.Race;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,51 +22,41 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @RestController
 public class LocationEndPoint implements LocationsApi {
 
     @Autowired
-    private LocationRepository locationRepository;
+    private LocationService locationService;
 
     @Override
     public ResponseEntity<List<Location>> getLocations() {
-        List<LocationEntity> locationEntities = locationRepository.findAll();
-        List<Location> locations = new ArrayList<>();
-        for (LocationEntity locationEntity : locationEntities) {
-            Location location = new Location();
-            location.setId(locationEntity.getId());
-            location.setName(locationEntity.getName());
-            locations.add(location);
-        }
-        return new ResponseEntity<List<Location>>(locations, HttpStatus.OK);
+        return locationService.getLocations();
     }
 
     @Override
     public ResponseEntity<Void> addLocation(@RequestBody Location location) {
-        LocationEntity locationEntity = new LocationEntity();
-        locationEntity.setId(location.getId());
-        locationEntity.setName(location.getName());
-        LocationEntity locationAdded = locationRepository.save(locationEntity);
-        URI uri = ServletUriComponentsBuilder
-                .fromCurrentRequest()
-                .path("/{id}")
-                .buildAndExpand(locationAdded.getId())
-                .toUri();
-        return ResponseEntity.created(uri).build();
+        return locationService.addLocation(location);
     }
 
     @Override
     public ResponseEntity<Location> getLocation(Integer id) {
-        Optional<LocationEntity> opt = locationRepository.findById(id);
-        if (opt.isPresent()) {
-            LocationEntity locationEntity = opt.get();
-            Location location = new Location();
-            location.setId(locationEntity.getId());
-            location.setName(locationEntity.getName());
-            return new ResponseEntity<Location>(location, HttpStatus.OK);
-        } else {
-            throw new LocationNotFoundException(id);
-        }
+        return locationService.getLocation(id);
+    }
+
+    @Override
+    public ResponseEntity<List<Race>> getLocationRaces(Integer id) {
+        return locationService.getLocationRaces(id);
+    }
+
+    @Override
+    public ResponseEntity<List<Animal>> getLocationAnimals(Integer id) {
+        return locationService.getLocationAnimals(id);
+    }
+
+    @Override
+    public ResponseEntity<Void> addLocationRace(Integer id, @RequestBody Integer race_id) {
+        return locationService.addLocationRace(id, race_id);
     }
 }

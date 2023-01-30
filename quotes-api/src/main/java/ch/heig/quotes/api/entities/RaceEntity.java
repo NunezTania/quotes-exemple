@@ -34,7 +34,9 @@ public class RaceEntity {
     private Set<LocationEntity> locations;
 
     @OneToMany(mappedBy = "race")
-    private Set<AnimalEntity> animal;
+    @Getter
+    @Setter
+    private Set<AnimalEntity> animals;
 
     public RaceEntity() {}
 

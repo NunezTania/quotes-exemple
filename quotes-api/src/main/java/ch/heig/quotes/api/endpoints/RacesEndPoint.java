@@ -1,6 +1,7 @@
 package ch.heig.quotes.api.endpoints;
 
-import ch.heig.quotes.api.exceptions.QuoteNotFoundException;
+import ch.heig.quotes.api.exceptions.RaceNotFoundException;
+import ch.heig.quotes.api.services.RaceService;
 import org.openapitools.api.RacesApi;
 import org.openapitools.model.Race;
 import ch.heig.quotes.api.entities.RaceEntity;
@@ -18,35 +19,15 @@ import java.util.Optional;
 public class RacesEndPoint implements RacesApi {
 
     @Autowired
-    private RaceRepository raceRepository;
+    private RaceService raceService;
 
     @Override
     public ResponseEntity<List<Race>> getRaces() {
-        List<RaceEntity> raceEntities= raceRepository.findAll();
-        List<Race> races = new ArrayList<>();
-        for (RaceEntity raceEntity : raceEntities) {
-            Race race = new Race();
-            race.setId(raceEntity.getId());
-            race.setName(raceEntity.getName());
-            race.setDescription(raceEntity.getDescription());
-            races.add(race);
-        }
-        return new ResponseEntity<>(races, HttpStatus.OK);
+       return raceService.getRaces();
     }
 
     @Override
     public ResponseEntity<Race> getRace(Integer id) {
-        Optional<RaceEntity> opt = raceRepository.findById(id);
-        if (opt.isPresent()) {
-            RaceEntity raceEntity = opt.get();
-            Race race = new Race();
-            race.setId(raceEntity.getId());
-            race.setName(raceEntity.getName());
-            race.setDescription(raceEntity.getDescription());
-            return new ResponseEntity<Race>(race, HttpStatus.OK);
-        } else {
-               // return ResponseEntity.notFound().build();
-            throw new QuoteNotFoundException(id);
-        }
+        return raceService.getRace(id);
     }
 }

@@ -9,15 +9,11 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-
 @Repository
 public interface AnimalRepository extends JpaRepository<AnimalEntity, Integer> {
-    AnimalEntity findById(int id);
-    List<AnimalEntity> findBySpeciesLike(String pattern);
     @Modifying
     @Transactional
-    @Query(value = "insert into animals (id, name, noise, species, race_id) " +
+    @Query(value = "insert into animals " +
                     "values (:id, :name, :noise, :species, :race_id)",
             nativeQuery = true)
     void insertAnimal(@Param("id") Integer id,
@@ -43,17 +39,20 @@ public interface AnimalRepository extends JpaRepository<AnimalEntity, Integer> {
     @Modifying
     @Transactional
     @Query(value = "update Animal as a set" +
-            " a.id = :new_id," +
+            " a.id = :id," +
             " a.name = :name," +
             " a.noise = :noise," +
             " a.species = :species," +
             "a.race = :race" +
             " where a.id = :id")
     void replaceAnimalById(@Param("id") Integer id,
-                          @Param("new_id") Integer new_id,
                           @Param("name") String name,
                           @Param("noise") String noise,
                           @Param("species") String species,
                           @Param("race") RaceEntity race);
+
+    @Query(value = "select count(*) from animals", nativeQuery = true)
+    long count();
+
 }
 
