@@ -21,5 +21,12 @@ public interface LocationRepository extends JpaRepository<LocationEntity, Intege
             "values (:id, :name)",
             nativeQuery = true)
     void insertLocation(@Param("id") Integer id,
-                      @Param("name") String name);
+                        @Param("name") String name);
+
+    @Modifying
+    @Transactional
+    @Query(value="insert into locations_races values (:race_id, :location_id)",
+            nativeQuery = true)
+    void addLocationRace(@Param("location_id") Integer location_id,
+                         @Param("race_id") Integer race_id);
 }

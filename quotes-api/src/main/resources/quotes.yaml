@@ -217,6 +217,28 @@ paths:
         '404':
           description: Not Found
       deprecated: false
+  /animals/mix:
+    post:
+      tags:
+        - Animals-end-point
+      summary: Crée un nouvel animal issu du mélange plusieurs animaux
+      operationId: mixAnimals
+      requestBody:
+        content:
+          'application/json':
+            schema:
+              $ref: '#/components/schemas/AnimalMixRequest'
+      responses:
+        '201':
+          description: animal crée
+          headers:
+            Location:
+              description: URL de l'animal crée
+              schema:
+                type: string
+                format: uri
+        '400':
+            description: Bad Request cannot mix more than 2 animals
   /races:
     get:
       tags:
@@ -346,6 +368,30 @@ paths:
         '404':
           description: Not Found
       deprecated: false
+    post:
+      tags:
+        - Locations-end-point
+      summary: Ajout d'un race à la location demandée
+      operationId: addLocationRace
+      parameters:
+        - name: id
+          in: path
+          description: numéro de la localisation à obtenir
+          required: true
+          schema:
+            type: integer
+            format: int32
+      requestBody:
+        content:
+          'application/json':
+            schema:
+              type: integer
+              format: int32
+      responses:
+        '200':
+          description: OK
+        '404':
+          description: Not Found
   /locations/{id}/animals:
     get:
       tags:
@@ -435,3 +481,8 @@ components:
           description: numéro auto-incrémenté de la localisation
           type: integer
           format: int32
+    AnimalMixRequest:
+      description: Les identifiants des animaux à mélanger
+      type: array
+      items:
+          $ref: '#/components/schemas/Animal'

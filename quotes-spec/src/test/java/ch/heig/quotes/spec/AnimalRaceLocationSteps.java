@@ -9,7 +9,6 @@ import org.openapitools.client.api.AnimalsEndPointApi;
 import org.openapitools.client.api.RacesEndPointApi;
 import org.openapitools.client.api.LocationsEndPointApi;
 import org.openapitools.client.model.Animal;
-import org.openapitools.client.model.Race;
 import org.openapitools.client.model.Location;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
